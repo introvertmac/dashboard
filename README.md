@@ -1,7 +1,3 @@
-Sure, here's an updated `README.md` file with details on all the features of the Solana Dashboard and instructions on how to run it locally.
-
----
-
 # Solana Dashboard
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
