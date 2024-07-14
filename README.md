@@ -45,8 +45,8 @@ To run this project locally, follow these steps:
 
 1. Clone the repository:
    ```
-   git clone [your-repo-url]
-   cd [your-repo-name]
+   git clone https://github.com/introvertmac/dashboard.git
+   cd dashboard
    ```
 
 2. Install dependencies:
