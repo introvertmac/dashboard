@@ -150,7 +150,7 @@ export default function NetworkOverview() {
   }
 
   const chartData = {
-    labels: coinGeckoData.priceData.map(d => new Date(d.timestamp).toLocaleTimeString()),
+    labels: coinGeckoData.priceData.map((d: { timestamp: number }) => new Date(d.timestamp).toLocaleTimeString()),
     datasets: [
       {
         label: 'SOL Price (USD)',
