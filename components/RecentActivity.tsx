@@ -5,11 +5,14 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
+import { format, formatDistanceToNow } from 'date-fns';
 
 interface Transaction {
   signature: string;
   blockTime: number;
   err: any;
+  signer: string;
+  fee: number;
 }
 
 const fetchRecentTransactions = async (): Promise<Transaction[]> => {
@@ -25,7 +28,7 @@ const fetchRecentTransactions = async (): Promise<Transaction[]> => {
       id: 'my-id',
       method: 'getSignaturesForAddress',
       params: [
-        'Vote111111111111111111111111111111111111111', // Solana vote program address
+        'Vote111111111111111111111111111111111111111',
         { limit: 5 },
       ],
     },
@@ -35,12 +38,42 @@ const fetchRecentTransactions = async (): Promise<Transaction[]> => {
       },
     }
   );
-  return response.data.result;
+  const transactions = response.data.result;
+
+  // Fetch transaction details for signer and fee
+  const detailedTransactions = await Promise.all(transactions.map(async (tx: any) => {
+    const txDetails = await axios.post(
+      heliusRpcUrl,
+      {
+        jsonrpc: '2.0',
+        id: 'my-id',
+        method: 'getTransaction',
+        params: [tx.signature],
+      },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+
+    const { meta, transaction } = txDetails.data.result;
+    const signer = transaction.message.accountKeys[0];
+    const fee = meta.fee / 1_000_000_000; // Convert lamports to SOL
+
+    return {
+      ...tx,
+      signer,
+      fee,
+    };
+  }));
+
+  return detailedTransactions;
 };
 
 const RecentActivity = () => {
   const { data, isLoading, error } = useQuery<Transaction[], Error>('recentTransactions', fetchRecentTransactions, {
-    refetchInterval: 30000, // Refetch every 30 seconds
+    refetchInterval: 30000,
   });
 
   if (isLoading) return <RecentActivitySkeleton />;
@@ -54,39 +87,62 @@ const RecentActivity = () => {
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="bg-white dark:bg-gray-800 shadow rounded-lg p-6"
+      className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 w-full"
     >
       <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Recent Transactions</h2>
       <div className="space-y-4">
         {data && data.length > 0 ? (
-          data.map((tx: Transaction, index: number) => (
-            <motion.div
-              key={tx.signature}
-              initial={{ opacity: 0, x: -20 }}
-              animate={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.3, delay: index * 0.1 }}
-              className="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
-            >
-              <div>
-                <a
-                  href={`https://solscan.io/tx/${tx.signature}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline"
-                >
-                  {tx.signature.slice(0, 8)}...{tx.signature.slice(-8)}
-                </a>
-                <p className="text-xs text-gray-500 dark:text-gray-400">
-                  {new Date(tx.blockTime * 1000).toLocaleString()}
-                </p>
-              </div>
-              {tx.err ? (
-                <XCircleIcon className="w-6 h-6 text-red-500" />
-              ) : (
-                <CheckCircleIcon className="w-6 h-6 text-green-500" />
-              )}
-            </motion.div>
-          ))
+          data.map((tx: Transaction, index: number) => {
+            const blockTime = new Date(tx.blockTime * 1000);
+            return (
+              <motion.div
+                key={tx.signature}
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+                className="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg shadow-lg flex items-center justify-between"
+              >
+                <div className="flex flex-col">
+                  <a
+                    href={`https://solscan.io/tx/${tx.signature}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline break-all"
+                  >
+                    {tx.signature}
+                  </a>
+                  <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                    <p className="font-bold">Timestamp:</p>
+                    <p>
+                      {formatDistanceToNow(blockTime, { addSuffix: true })} -{' '}
+                      {format(blockTime, "MMMM dd, yyyy HH:mm:ss 'UTC'")}
+                    </p>
+                  </div>
+                  <div className="mt-2">
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Signer:{" "}
+                      <a
+                        href={`https://solscan.io/account/${tx.signer}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-600 dark:text-blue-400 hover:underline"
+                      >
+                        {tx.signer}
+                      </a>
+                    </p>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">Fee: {tx.fee.toFixed(6)} SOL</p>
+                  </div>
+                </div>
+                <div className="ml-4">
+                  {tx.err ? (
+                    <XCircleIcon className="w-6 h-6 text-red-500" />
+                  ) : (
+                    <CheckCircleIcon className="w-6 h-6 text-green-500" />
+                  )}
+                </div>
+              </motion.div>
+            );
+          })
         ) : (
           <p className="text-gray-500 dark:text-gray-400">No recent transactions found.</p>
         )}
@@ -96,17 +152,18 @@ const RecentActivity = () => {
 };
 
 const RecentActivitySkeleton = () => (
-  <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 animate-pulse">
+  <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 w-full animate-pulse">
     <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-6"></div>
-    {[...Array(5)].map((_, i) => (
-      <div key={i} className="flex items-center justify-between p-4 bg-gray-100 dark:bg-gray-700 rounded-lg mb-4">
-        <div>
+    <div className="space-y-4">
+      {[...Array(5)].map((_, i) => (
+        <div key={i} className="p-4 bg-gray-100 dark:bg-gray-700 rounded-lg">
           <div className="h-4 bg-gray-200 dark:bg-gray-600 rounded w-24 mb-2"></div>
-          <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-32"></div>
+          <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-32 mb-2"></div>
+          <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-20 mb-2"></div>
+          <div className="h-3 bg-gray-200 dark:bg-gray-600 rounded w-20"></div>
         </div>
-        <div className="h-6 w-6 bg-gray-200 dark:bg-gray-600 rounded-full"></div>
-      </div>
-    ))}
+      ))}
+    </div>
   </div>
 );
 

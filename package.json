@@ -12,6 +12,8 @@
     "@heroicons/react": "^2.1.5",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
+    "chartjs-adapter-date-fns": "^3.0.0",
+    "date-fns": "^3.6.0",
     "framer-motion": "^11.3.2",
     "next": "14.2.5",
     "react": "^18",

@@ -41,6 +41,13 @@ const fetchTokenData = async (): Promise<Token[]> => {
   }
 };
 
+const formatMarketCap = (marketCap: number): string => {
+  if (marketCap >= 1_000_000_000) {
+    return `${(marketCap / 1_000_000_000).toFixed(2)}B`;
+  }
+  return `${(marketCap / 1_000_000).toFixed(2)}M`;
+};
+
 const TokenMetrics = () => {
   const { data, isLoading, error } = useQuery<Token[], Error>('solanaTokenData', fetchTokenData, {
     refetchInterval: 300000, // Refetch every 5 minutes
@@ -82,7 +89,7 @@ const TokenMetrics = () => {
                   {token.price_change_percentage_24h >= 0 ? '▲' : '▼'} {Math.abs(token.price_change_percentage_24h).toFixed(2)}%
                 </p>
                 <p className="text-sm text-gray-500 dark:text-gray-400">
-                  MCap: ${(token.market_cap / 1000000).toFixed(2)}M
+                  MCap: {formatMarketCap(token.market_cap)}
                 </p>
               </div>
             </div>

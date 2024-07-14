@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';
+import { SunIcon, MoonIcon } from '@heroicons/react/24/solid';
 import { motion } from 'framer-motion';
 import NetworkOverview from '../components/NetworkOverview';
 import TokenMetrics from '../components/TokenMetrics';
@@ -9,8 +10,6 @@ import DeFiAnalytics from '../components/DeFiAnalytics';
 import SolanaInfo from '../components/SolanaInfo';
 import RecentActivity from '../components/RecentActivity';
 import TopYieldPools from '../components/TopYieldPools';
-
-
 
 const queryClient = new QueryClient();
 
@@ -28,14 +27,14 @@ const Home = () => {
           <nav className="flex justify-between items-center py-4 px-6">
             <h1 className="text-2xl font-bold">Solana Dashboard</h1>
             <button
-              className={`px-4 py-2 rounded transition-colors ${
-                isDarkMode 
-                  ? 'bg-white text-gray-900 hover:bg-gray-200' 
-                  : 'bg-gray-900 text-white hover:bg-gray-700'
-              }`}
+              className="px-4 py-2 rounded transition-colors focus:outline-none"
               onClick={toggleDarkMode}
             >
-              {isDarkMode ? 'Light Mode' : 'Dark Mode'}
+              {isDarkMode ? (
+                <SunIcon className="w-8 h-8 text-yellow-500" />
+              ) : (
+                <MoonIcon className="w-8 h-8 text-gray-500" />
+              )}
             </button>
           </nav>
           
@@ -48,12 +47,14 @@ const Home = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.5 }}
-            className="container mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-2 gap-8"
+            className="container mx-auto px-4 py-8"
           >
-            <NetworkOverview />
-            <TokenMetrics />
-            <DeFiAnalytics />
-            <TopYieldPools />
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <NetworkOverview />
+              <TokenMetrics />
+              <DeFiAnalytics />
+              <TopYieldPools />
+            </div>
             <RecentActivity />
           </motion.div>
         </div>
