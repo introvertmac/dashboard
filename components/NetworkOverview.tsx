@@ -140,7 +140,14 @@ export default function NetworkOverview() {
   });
 
   if (isCoinGeckoLoading || isSolanaLoading) return <NetworkOverviewSkeleton />;
-  if (coinGeckoError || solanaError) return <ErrorDisplay error={coinGeckoError || solanaError} />;
+  if (coinGeckoError || solanaError) {
+    const error = coinGeckoError || solanaError;
+    if (error instanceof Error) {
+      return <ErrorDisplay error={error} />;
+    } else {
+      return <ErrorDisplay error={new Error('An unknown error occurred')} />;
+    }
+  }
 
   const chartData = {
     labels: coinGeckoData.priceData.map(d => new Date(d.timestamp).toLocaleTimeString()),
