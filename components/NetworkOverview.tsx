@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React from 'react';
 import { useQuery } from 'react-query';
@@ -14,18 +14,10 @@ import {
   LineElement,
   Title,
   Tooltip,
-  Legend
+  Legend,
 } from 'chart.js';
 
-ChartJS.register(
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  LineElement,
-  Title,
-  Tooltip,
-  Legend
-);
+ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 
 const CACHE_KEY = 'coinGeckoData';
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
@@ -45,12 +37,7 @@ const fetchCoinGeckoData = async () => {
     );
 
     const {
-      market_data: {
-        current_price,
-        price_change_percentage_24h,
-        market_cap,
-        total_volume,
-      },
+      market_data: { current_price, price_change_percentage_24h, market_cap, total_volume },
     } = coingeckoResponse.data;
 
     const historicalDataResponse = await axios.get(
@@ -120,7 +107,7 @@ const fetchSolanaData = async () => {
       circulatingSupply,
       totalSupply,
       currentEpoch,
-      slotHeight
+      slotHeight,
     };
   } catch (error) {
     console.error('Error fetching Solana data:', error);
@@ -129,13 +116,21 @@ const fetchSolanaData = async () => {
 };
 
 export default function NetworkOverview() {
-  const { data: coinGeckoData, isLoading: isCoinGeckoLoading, error: coinGeckoError } = useQuery('coinGeckoData', fetchCoinGeckoData, {
+  const {
+    data: coinGeckoData,
+    isLoading: isCoinGeckoLoading,
+    error: coinGeckoError,
+  } = useQuery('coinGeckoData', fetchCoinGeckoData, {
     refetchInterval: 300000, // Refetch every 5 minutes
     staleTime: 300000, // Consider data stale after 5 minutes
     cacheTime: 600000, // Keep unused data in cache for 10 minutes
   });
 
-  const { data: solanaData, isLoading: isSolanaLoading, error: solanaError } = useQuery('solanaData', fetchSolanaData, {
+  const {
+    data: solanaData,
+    isLoading: isSolanaLoading,
+    error: solanaError,
+  } = useQuery('solanaData', fetchSolanaData, {
     refetchInterval: 60000, // Refetch every minute
   });
 
@@ -198,7 +193,7 @@ export default function NetworkOverview() {
         </div>
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">Current TPS</p>
-          <p className="text-3xl font-semibold text-gray-900 dark:text-white">{solanaData.tps.toFixed(0)}</p>
+          <p className="text-3xl font-semibold text-gray-900 dark:text-white">{solanaData?.tps?.toFixed(0) ?? 'N/A'}</p>
         </div>
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">Market Cap</p>
@@ -206,15 +201,15 @@ export default function NetworkOverview() {
         </div>
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">Active Validators</p>
-          <p className="text-3xl font-semibold text-gray-900 dark:text-white">{solanaData.activeValidators}</p>
+          <p className="text-3xl font-semibold text-gray-900 dark:text-white">{solanaData?.activeValidators ?? 'N/A'}</p>
         </div>
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">Current Epoch</p>
-          <p className="text-3xl font-semibold text-gray-900 dark:text-white">{solanaData.currentEpoch}</p>
+          <p className="text-3xl font-semibold text-gray-900 dark:text-white">{solanaData?.currentEpoch ?? 'N/A'}</p>
         </div>
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">Current Slot</p>
-          <p className="text-3xl font-semibold text-gray-900 dark:text-white">{solanaData.slotHeight}</p>
+          <p className="text-3xl font-semibold text-gray-900 dark:text-white">{solanaData?.slotHeight ?? 'N/A'}</p>
         </div>
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">Network Status</p>

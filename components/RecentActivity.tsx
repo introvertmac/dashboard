@@ -1,19 +1,32 @@
+'use client';
+
 import React from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import { CheckCircleIcon, XCircleIcon } from '@heroicons/react/24/solid';
 
-const fetchRecentTransactions = async () => {
+interface Transaction {
+  signature: string;
+  blockTime: number;
+  err: any;
+}
+
+const fetchRecentTransactions = async (): Promise<Transaction[]> => {
+  const heliusRpcUrl = process.env.NEXT_PUBLIC_HELIUS_RPC_URL;
+  if (!heliusRpcUrl) {
+    throw new Error('NEXT_PUBLIC_HELIUS_RPC_URL is not defined');
+  }
+
   const response = await axios.post(
-    process.env.NEXT_PUBLIC_HELIUS_RPC_URL,
+    heliusRpcUrl,
     {
       jsonrpc: '2.0',
       id: 'my-id',
       method: 'getSignaturesForAddress',
       params: [
         'Vote111111111111111111111111111111111111111', // Solana vote program address
-        { limit: 5 }
+        { limit: 5 },
       ],
     },
     {
@@ -26,12 +39,15 @@ const fetchRecentTransactions = async () => {
 };
 
 const RecentActivity = () => {
-  const { data, isLoading, error } = useQuery('recentTransactions', fetchRecentTransactions, {
+  const { data, isLoading, error } = useQuery<Transaction[], Error>('recentTransactions', fetchRecentTransactions, {
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 
   if (isLoading) return <RecentActivitySkeleton />;
-  if (error) return <ErrorDisplay error={error} />;
+  if (error) {
+    const typedError = error instanceof Error ? error : new Error('An unknown error occurred');
+    return <ErrorDisplay error={typedError} />;
+  }
 
   return (
     <motion.div
@@ -43,7 +59,7 @@ const RecentActivity = () => {
       <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Recent Transactions</h2>
       <div className="space-y-4">
         {data && data.length > 0 ? (
-          data.map((tx, index) => (
+          data.map((tx: Transaction, index: number) => (
             <motion.div
               key={tx.signature}
               initial={{ opacity: 0, x: -20 }}
@@ -94,7 +110,7 @@ const RecentActivitySkeleton = () => (
   </div>
 );
 
-const ErrorDisplay = ({ error }) => (
+const ErrorDisplay = ({ error }: { error: Error }) => (
   <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
     <strong className="font-bold">Error:</strong>
     <span className="block sm:inline"> {error.message}</span>

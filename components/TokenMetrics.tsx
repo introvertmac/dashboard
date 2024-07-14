@@ -1,4 +1,4 @@
-'use client'
+'use client';
 
 import React from 'react';
 import { useQuery } from 'react-query';
@@ -6,10 +6,20 @@ import axios from 'axios';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 
+interface Token {
+  id: string;
+  image: string;
+  name: string;
+  symbol: string;
+  current_price: number;
+  price_change_percentage_24h: number;
+  market_cap: number;
+}
+
 const CACHE_KEY = 'solanaTokenData';
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
-const fetchTokenData = async () => {
+const fetchTokenData = async (): Promise<Token[]> => {
   const cachedData = localStorage.getItem(CACHE_KEY);
   if (cachedData) {
     const { data, timestamp } = JSON.parse(cachedData);
@@ -22,7 +32,7 @@ const fetchTokenData = async () => {
     const response = await axios.get(
       `${process.env.NEXT_PUBLIC_COINGECKO_API_URL}/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false&category=solana-ecosystem`
     );
-    const data = response.data;
+    const data: Token[] = response.data;
     localStorage.setItem(CACHE_KEY, JSON.stringify({ data, timestamp: Date.now() }));
     return data;
   } catch (error) {
@@ -32,7 +42,7 @@ const fetchTokenData = async () => {
 };
 
 const TokenMetrics = () => {
-  const { data, isLoading, error } = useQuery('solanaTokenData', fetchTokenData, {
+  const { data, isLoading, error } = useQuery<Token[], Error>('solanaTokenData', fetchTokenData, {
     refetchInterval: 300000, // Refetch every 5 minutes
     staleTime: 300000, // Consider data stale after 5 minutes
     cacheTime: 600000, // Keep unused data in cache for 10 minutes
@@ -40,6 +50,8 @@ const TokenMetrics = () => {
 
   if (isLoading) return <TokenMetricsSkeleton />;
   if (error) return <ErrorDisplay error={error} />;
+
+  const tokens = data ?? [];
 
   return (
     <motion.div
@@ -50,7 +62,7 @@ const TokenMetrics = () => {
     >
       <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">Top Solana Tokens</h2>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-        {data.map((token, index) => (
+        {tokens.map((token: Token, index: number) => (
           <motion.div
             key={token.id}
             initial={{ opacity: 0, x: -20 }}
@@ -99,7 +111,7 @@ const TokenMetricsSkeleton = () => (
   </div>
 );
 
-const ErrorDisplay = ({ error }) => (
+const ErrorDisplay = ({ error }: { error: Error }) => (
   <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
     <strong className="font-bold">Error:</strong>
     <span className="block sm:inline"> {error.message}</span>
