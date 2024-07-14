@@ -1,84 +1,105 @@
 # Solana Dashboard
 
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+This project is a Solana blockchain dashboard that provides various metrics and information about the Solana ecosystem. It includes components for network overview, token metrics, DeFi analytics, recent activity, Solana information, and top yield pools.
 
-## Features
+## Components
 
-- **Network Overview**: Provides real-time data on Solana network including TPS (Transactions Per Second), active validators, current epoch, and current slot.
-- **Token Metrics**: Displays top Solana tokens with information on current price, market cap, and 24h price change.
-- **DeFi Analytics**: Shows analytics of top DeFi protocols on the Solana network.
-- **Yield Pools**: Lists the top yield pools on the Solana network with details on TVL (Total Value Locked) and APY (Annual Percentage Yield).
-- **Recent Activity**: Shows recent transactions on the Solana network.
-- **Search**: Provides a search bar for users to query specific information about the Solana network.
+1. **NetworkOverview.tsx**
+   - Displays key metrics about the Solana network, such as current TPS (Transactions Per Second) and SOL price.
+   - Uses the Helius RPC for real-time Solana network data.
+
+2. **TokenMetrics.tsx**
+   - Shows information about top tokens in the Solana ecosystem.
+   - Fetches data from the CoinGecko API to display token prices and 24-hour price changes.
+
+3. **DeFiAnalytics.tsx**
+   - Provides an overview of DeFi (Decentralized Finance) activity on Solana.
+   - Uses the DeFi Llama API to fetch and display TVL (Total Value Locked) data for Solana DeFi protocols.
+
+4. **RecentActivity.tsx**
+   - Displays recent transactions or activities on the Solana blockchain.
+   - Utilizes the Helius RPC to fetch recent transaction data.
+
+5. **SolanaInfo.tsx**
+   - Shows general information about Solana, potentially including market cap, circulating supply, etc.
+   - May use a combination of CoinGecko and Solana-specific APIs for data.
+
+6. **TopYieldPools.tsx**
+   - Displays information about the top-yielding liquidity pools or staking opportunities in the Solana ecosystem.
+   - Likely uses a combination of DeFi Llama and other Solana DeFi protocol-specific APIs.
+
+## Environment Variables
+
+This project uses the following environment variables:
+
+- `NEXT_PUBLIC_HELIUS_RPC_URL`: Helius RPC URL for Solana network data
+  - Format: `https://mainnet.helius-rpc.com/?api-key=YOUR_API_KEY`
+- `NEXT_PUBLIC_COINGECKO_API_URL`: CoinGecko API URL for token data
+  - Value: `https://api.coingecko.com/api/v3`
+- `NEXT_PUBLIC_DEFILLAMA_API_URL`: DeFi Llama API URL for DeFi data
+  - Value: `https://api.llama.fi`
 
 ## Getting Started
 
-### Prerequisites
-
-- [Node.js](https://nodejs.org/en/) (v14.0.0 or higher recommended)
-- [npm](https://www.npmjs.com/) (v6.0.0 or higher recommended) or [yarn](https://yarnpkg.com/) (v1.22.0 or higher recommended) or [pnpm](https://pnpm.io/) or [bun](https://bun.sh/)
-
-### Environment Variables
-
-Create a `.env.local` file in the root of your project and add the following environment variables:
-
-```env
-NEXT_PUBLIC_HELIUS_RPC_URL=https://mainnet.helius-rpc.com/?api-key=YOUR_API_KEY
-NEXT_PUBLIC_COINGECKO_API_URL=https://api.coingecko.com/api/v3
-NEXT_PUBLIC_DEFILLAMA_API_URL=https://api.llama.fi
-```
-
-Replace `YOUR_API_KEY` with your actual API key.
-
-### Installation
+To run this project locally, follow these steps:
 
 1. Clone the repository:
-
-   ```bash
-   git clone https://github.com/introvertmac/dashboard.git
-   cd solana-dashboard
+   ```
+   git clone [your-repo-url]
+   cd [your-repo-name]
    ```
 
-2. Install the dependencies:
-
-   ```bash
+2. Install dependencies:
+   ```
    npm install
-   # or
-   yarn install
-   # or
-   pnpm install
-   # or
-   bun install
    ```
 
-### Running the Development Server
+3. Create a `.env.local` file in the root directory and add the following environment variables:
+   ```
+   NEXT_PUBLIC_HELIUS_RPC_URL=https://mainnet.helius-rpc.com/?api-key=YOUR_API_KEY
+   NEXT_PUBLIC_COINGECKO_API_URL=https://api.coingecko.com/api/v3
+   NEXT_PUBLIC_DEFILLAMA_API_URL=https://api.llama.fi
+   ```
+   Replace `YOUR_API_KEY` with your actual Helius API key.
 
-Run the development server:
+4. Run the development server:
+   ```
+   npm run dev
+   ```
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+5. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Building for Production
+
+To build the application for production, run:
+
+```
+npm run build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the dashboard.
+Then, you can start the production server with:
+
+```
+npm start
+```
+
+## Technologies Used
+
+- Next.js
+- React
+- TypeScript
+- Tailwind CSS
+- React Query
+- Axios
+- Recharts (for charts and graphs)
+
+## API Dependencies
+
+- Helius RPC (Solana network data)
+- CoinGecko API (Token data)
+- DeFi Llama API (DeFi protocol data)
+
+Ensure you have the necessary API keys and permissions to access these services.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+If you need any help, feel free to reach out to Manish at [https://x.com/0x7manish](https://x.com/0x7manish).
