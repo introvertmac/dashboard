@@ -33,7 +33,7 @@ const DeFiAnalytics = () => {
     return <ErrorDisplay error={error} />;
   }
 
-  const solanaProtocols = data.filter((protocol) => protocol.chain === 'Solana');
+  const solanaProtocols = data?.filter((protocol) => protocol.chain === 'Solana') || [];
   const top7Protocols = solanaProtocols
     .sort((a, b) => b.tvl - a.tvl)
     .slice(0, 7);
