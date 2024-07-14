@@ -10,7 +10,7 @@ import NFTTrends from '../components/NFTTrends';
 import SolanaInfo from '../components/SolanaInfo';
 import RecentActivity from '../components/RecentActivity';
 import TopYieldPools from '../components/TopYieldPools';
-import JupiterSwap from '@/components/Jupiterswap';
+
 
 
 const queryClient = new QueryClient();
