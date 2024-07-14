@@ -1,6 +1,6 @@
 import React from 'react';
 import { useQuery } from 'react-query';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
 
 interface Protocol {
@@ -38,6 +38,11 @@ const DeFiAnalytics = () => {
     .sort((a, b) => b.tvl - a.tvl)
     .slice(0, 7);
 
+  const chartData = top7Protocols.map(protocol => ({
+    name: protocol.name,
+    tvl: protocol.tvl
+  }));
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20 }}
@@ -48,8 +53,7 @@ const DeFiAnalytics = () => {
       <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">DeFi Analytics</h2>
       <div className="mb-8">
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={solanaProtocols}>
-            <CartesianGrid strokeDasharray="3 3" stroke="#374151" />
+          <AreaChart data={chartData}>
             <XAxis dataKey="name" tick={{ fill: '#6B7280' }} />
             <YAxis tick={{ fill: '#6B7280' }} />
             <Tooltip
@@ -57,9 +61,8 @@ const DeFiAnalytics = () => {
               labelStyle={{ color: '#F3F4F6' }}
               itemStyle={{ color: '#F3F4F6' }}
             />
-            <Legend wrapperStyle={{ color: '#6B7280' }} />
-            <Line type="monotone" dataKey="tvl" stroke="#8B5CF6" strokeWidth={2} dot={false} />
-          </LineChart>
+            <Area type="monotone" dataKey="tvl" stroke="#8884d8" fill="#8884d8" />
+          </AreaChart>
         </ResponsiveContainer>
       </div>
       <h3 className="text-xl font-semibold mt-6 mb-4 text-gray-800 dark:text-white">Top DeFi Protocols</h3>
