@@ -53,13 +53,27 @@ const DeFiAnalytics = () => {
       <h2 className="text-2xl font-bold mb-6 text-gray-800 dark:text-white">DeFi Analytics</h2>
       <div className="mb-8">
         <ResponsiveContainer width="100%" height={300}>
-          <AreaChart data={chartData}>
+          <AreaChart 
+            data={chartData} 
+            margin={{ left: 0, right: 20, top: 20, bottom: 20 }}
+          >
             <XAxis dataKey="name" tick={{ fill: '#6B7280' }} />
-            <YAxis tick={{ fill: '#6B7280' }} />
+            <YAxis 
+              tick={{ fill: '#6B7280' }} 
+              width={100}
+              tickFormatter={(value) => {
+                if (value >= 1000000000) {
+                  return `$${(value / 1000000000).toFixed(1)}B`;
+                }
+                return `$${(value / 1000000).toFixed(0)}M`;
+              }}
+              domain={['dataMin', 'dataMax']}
+            />
             <Tooltip
               contentStyle={{ backgroundColor: '#1F2937', border: 'none' }}
               labelStyle={{ color: '#F3F4F6' }}
               itemStyle={{ color: '#F3F4F6' }}
+              formatter={(value) => [`$${value.toLocaleString()}`, 'TVL']}
             />
             <Area type="monotone" dataKey="tvl" stroke="#8884d8" fill="#8884d8" />
           </AreaChart>
