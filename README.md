@@ -21,8 +21,8 @@ This project is a Solana blockchain dashboard that provides various metrics and 
    - Utilizes the Helius RPC to fetch recent transaction data.
 
 5. **SolanaInfo.tsx**
-   - Shows general information about Solana, potentially including market cap, circulating supply, etc.
-   - May use a combination of CoinGecko and Solana-specific APIs for data.
+   - Provides a search functionality for Solana transactions, addresses, and tokens.
+   - Redirects to Solscan.io with the appropriate URL based on the input type.
 
 6. **TopYieldPools.tsx**
    - Displays information about the top-yielding liquidity pools or staking opportunities in the Solana ecosystem.
