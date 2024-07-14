@@ -21,7 +21,7 @@ const fetchDeFiData = async () => {
 };
 
 const DeFiAnalytics = () => {
-  const { data, isLoading, error } = useQuery<Protocol[]>('defiData', fetchDeFiData, {
+  const { data, isLoading, error } = useQuery<Protocol[], Error>('defiData', fetchDeFiData, {
     refetchInterval: 300000, // Refetch every 5 minutes
   });
 
@@ -104,7 +104,7 @@ const DeFiAnalyticsSkeleton = () => (
   </div>
 );
 
-const ErrorDisplay = ({ error }: { error: Error }) => (
+const ErrorDisplay = ({ error }: { error: { message: string } }) => (
   <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
     <strong className="font-bold">Error:</strong>
     <span className="block sm:inline"> {error.message}</span>
