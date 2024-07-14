@@ -1,8 +1,63 @@
+Sure, here's an updated `README.md` file with details on all the features of the Solana Dashboard and instructions on how to run it locally.
+
+---
+
+# Solana Dashboard
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+
+## Features
+
+- **Network Overview**: Provides real-time data on Solana network including TPS (Transactions Per Second), active validators, current epoch, and current slot.
+- **Token Metrics**: Displays top Solana tokens with information on current price, market cap, and 24h price change.
+- **DeFi Analytics**: Shows analytics of top DeFi protocols on the Solana network.
+- **Yield Pools**: Lists the top yield pools on the Solana network with details on TVL (Total Value Locked) and APY (Annual Percentage Yield).
+- **Recent Activity**: Shows recent transactions on the Solana network.
+- **Search**: Provides a search bar for users to query specific information about the Solana network.
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- [Node.js](https://nodejs.org/en/) (v14.0.0 or higher recommended)
+- [npm](https://www.npmjs.com/) (v6.0.0 or higher recommended) or [yarn](https://yarnpkg.com/) (v1.22.0 or higher recommended) or [pnpm](https://pnpm.io/) or [bun](https://bun.sh/)
+
+### Environment Variables
+
+Create a `.env.local` file in the root of your project and add the following environment variables:
+
+```env
+NEXT_PUBLIC_HELIUS_RPC_URL=https://mainnet.helius-rpc.com/?api-key=YOUR_API_KEY
+NEXT_PUBLIC_COINGECKO_API_URL=https://api.coingecko.com/api/v3
+NEXT_PUBLIC_DEFILLAMA_API_URL=https://api.llama.fi
+```
+
+Replace `YOUR_API_KEY` with your actual API key.
+
+### Installation
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/introvertmac/dashboard.git
+   cd solana-dashboard
+   ```
+
+2. Install the dependencies:
+
+   ```bash
+   npm install
+   # or
+   yarn install
+   # or
+   pnpm install
+   # or
+   bun install
+   ```
+
+### Running the Development Server
+
+Run the development server:
 
 ```bash
 npm run dev
@@ -14,27 +69,20 @@ pnpm dev
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the dashboard.
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-## Learn More
 
-To learn more about Next.js, take a look at the following resources:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-## Deploy on Vercel
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+
+
+
+
+

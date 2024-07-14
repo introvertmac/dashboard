@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 import NetworkOverview from '../components/NetworkOverview';
 import TokenMetrics from '../components/TokenMetrics';
 import DeFiAnalytics from '../components/DeFiAnalytics';
-import NFTTrends from '../components/NFTTrends';
 import SolanaInfo from '../components/SolanaInfo';
 import RecentActivity from '../components/RecentActivity';
 import TopYieldPools from '../components/TopYieldPools';
