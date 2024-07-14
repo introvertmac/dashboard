@@ -57,7 +57,7 @@ const fetchCoinGeckoData = async () => {
       `${process.env.NEXT_PUBLIC_COINGECKO_API_URL}/coins/solana/market_chart?vs_currency=usd&days=1`
     );
 
-    const priceData = historicalDataResponse.data.prices.map(([timestamp, price]) => ({
+    const priceData = historicalDataResponse.data.prices.map(([timestamp, price]: [number, number]) => ({
       timestamp,
       price,
     }));
@@ -114,13 +114,13 @@ const fetchSolanaData = async () => {
     const currentEpoch = epochInfoResponse.data.result.epoch;
     const slotHeight = epochInfoResponse.data.result.slotIndex;
 
-    return { 
-      tps, 
-      activeValidators, 
-      circulatingSupply, 
-      totalSupply, 
-      currentEpoch, 
-      slotHeight 
+    return {
+      tps,
+      activeValidators,
+      circulatingSupply,
+      totalSupply,
+      currentEpoch,
+      slotHeight
     };
   } catch (error) {
     console.error('Error fetching Solana data:', error);
@@ -197,12 +197,10 @@ export default function NetworkOverview() {
           <p className="text-sm text-gray-500 dark:text-gray-400">Market Cap</p>
           <p className="text-3xl font-semibold text-gray-900 dark:text-white">${(coinGeckoData.marketCap / 1e9).toFixed(2)}B</p>
         </div>
-       
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">Active Validators</p>
           <p className="text-3xl font-semibold text-gray-900 dark:text-white">{solanaData.activeValidators}</p>
         </div>
-       
         <div>
           <p className="text-sm text-gray-500 dark:text-gray-400">Current Epoch</p>
           <p className="text-3xl font-semibold text-gray-900 dark:text-white">{solanaData.currentEpoch}</p>
@@ -244,7 +242,7 @@ function NetworkOverviewSkeleton() {
   );
 }
 
-function ErrorDisplay({ error }) {
+function ErrorDisplay({ error }: { error: Error }) {
   return (
     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
       <strong className="font-bold">Error:</strong>
