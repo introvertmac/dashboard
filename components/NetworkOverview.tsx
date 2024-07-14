@@ -154,7 +154,7 @@ export default function NetworkOverview() {
     datasets: [
       {
         label: 'SOL Price (USD)',
-        data: coinGeckoData.priceData.map(d => d.price),
+        data: coinGeckoData.priceData.map((d: { price: number }) => d.price),
         borderColor: 'rgb(75, 192, 192)',
         tension: 0.1,
       },
