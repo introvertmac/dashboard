@@ -4,6 +4,7 @@ import React from 'react';
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 
 const CACHE_KEY = 'solanaTokenData';
 const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
@@ -57,7 +58,7 @@ const TokenMetrics = () => {
             transition={{ duration: 0.3, delay: index * 0.1 }}
             className="flex items-center p-4 bg-gray-50 dark:bg-gray-700 rounded-lg"
           >
-            <img src={token.image} alt={token.name} className="w-10 h-10 mr-4" />
+            <Image src={token.image} alt={token.name} width={40} height={40} className="w-10 h-10 mr-4" />
             <div className="flex-grow">
               <div className="flex justify-between items-center mb-1">
                 <p className="font-semibold text-gray-800 dark:text-white">{token.name}</p>

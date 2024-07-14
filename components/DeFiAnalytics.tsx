@@ -3,6 +3,14 @@ import { useQuery } from 'react-query';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 import { motion } from 'framer-motion';
 
+interface Protocol {
+  id: string;
+  name: string;
+  symbol: string;
+  chain: string;
+  tvl: number;
+}
+
 const fetchDeFiData = async () => {
   const response = await fetch(`${process.env.NEXT_PUBLIC_DEFILLAMA_API_URL}/protocols`);
   if (!response.ok) {
@@ -13,7 +21,7 @@ const fetchDeFiData = async () => {
 };
 
 const DeFiAnalytics = () => {
-  const { data, isLoading, error } = useQuery('defiData', fetchDeFiData, {
+  const { data, isLoading, error } = useQuery<Protocol[]>('defiData', fetchDeFiData, {
     refetchInterval: 300000, // Refetch every 5 minutes
   });
 
