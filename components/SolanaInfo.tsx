@@ -26,6 +26,9 @@ const SearchBar: React.FC = () => {
     }
 
     window.open(url, '_blank');
+    
+    // Clear the input after search
+    setSearchInput('');
   };
 
   return (

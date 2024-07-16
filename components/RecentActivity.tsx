@@ -38,6 +38,7 @@ const fetchRecentTransactions = async (): Promise<Transaction[]> => {
       },
     }
   );
+
   const transactions = response.data.result;
 
   // Fetch transaction details for signer and fee
@@ -71,7 +72,7 @@ const fetchRecentTransactions = async (): Promise<Transaction[]> => {
   return detailedTransactions;
 };
 
-const RecentActivity = () => {
+const RecentActivity: React.FC = () => {
   const { data, isLoading, error } = useQuery<Transaction[], Error>('recentTransactions', fetchRecentTransactions, {
     refetchInterval: 30000,
   });
@@ -81,6 +82,10 @@ const RecentActivity = () => {
     const typedError = error instanceof Error ? error : new Error('An unknown error occurred');
     return <ErrorDisplay error={typedError} />;
   }
+
+  const truncateAddress = (address: string): string => {
+    return `${address.slice(0, 4)}...${address.slice(-4)}`;
+  };
 
   return (
     <motion.div
@@ -109,7 +114,8 @@ const RecentActivity = () => {
                     rel="noopener noreferrer"
                     className="text-sm font-medium text-blue-600 dark:text-blue-400 hover:underline break-all"
                   >
-                    {tx.signature}
+                    <span className="hidden md:inline">{tx.signature}</span>
+                    <span className="md:hidden">{truncateAddress(tx.signature)}</span>
                   </a>
                   <div className="text-xs text-gray-500 dark:text-gray-400 mt-1">
                     <p className="font-bold">Timestamp:</p>
@@ -127,7 +133,8 @@ const RecentActivity = () => {
                         rel="noopener noreferrer"
                         className="text-blue-600 dark:text-blue-400 hover:underline"
                       >
-                        {tx.signer}
+                        <span className="hidden md:inline">{tx.signer}</span>
+                        <span className="md:hidden">{truncateAddress(tx.signer)}</span>
                       </a>
                     </p>
                     <p className="text-xs text-gray-500 dark:text-gray-400">Fee: {tx.fee.toFixed(6)} SOL</p>
@@ -151,7 +158,7 @@ const RecentActivity = () => {
   );
 };
 
-const RecentActivitySkeleton = () => (
+const RecentActivitySkeleton: React.FC = () => (
   <div className="bg-white dark:bg-gray-800 shadow rounded-lg p-6 w-full animate-pulse">
     <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-6"></div>
     <div className="space-y-4">
@@ -167,7 +174,11 @@ const RecentActivitySkeleton = () => (
   </div>
 );
 
-const ErrorDisplay = ({ error }: { error: Error }) => (
+interface ErrorDisplayProps {
+  error: Error;
+}
+
+const ErrorDisplay: React.FC<ErrorDisplayProps> = ({ error }) => (
   <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
     <strong className="font-bold">Error:</strong>
     <span className="block sm:inline"> {error.message}</span>

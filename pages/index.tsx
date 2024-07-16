@@ -55,7 +55,9 @@ const Home = () => {
               <DeFiAnalytics />
               <TopYieldPools />
             </div>
-            <RecentActivity />
+            <div className="mt-8">
+              <RecentActivity />
+            </div>
           </motion.div>
         </div>
         
