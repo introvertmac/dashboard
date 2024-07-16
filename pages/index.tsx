@@ -14,7 +14,7 @@ import TopYieldPools from '../components/TopYieldPools';
 const queryClient = new QueryClient();
 
 const Home = () => {
-  const [isDarkMode, setIsDarkMode] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(true);
 
   const toggleDarkMode = () => {
     setIsDarkMode(!isDarkMode);
@@ -22,8 +22,8 @@ const Home = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className={`min-h-screen flex flex-col ${isDarkMode ? 'dark' : ''}`}>
-        <div className="flex-grow dark:bg-gray-900 dark:text-white">
+      <div className={`min-h-screen flex flex-col ${isDarkMode ? 'dark bg-gray-900 text-white' : 'bg-white text-gray-900'} overflow-x-hidden`}>
+        <div className="flex-grow">
           <nav className="flex justify-between items-center py-4 px-6">
             <h1 className="text-2xl font-bold">Solana Dashboard</h1>
             <button
@@ -60,14 +60,14 @@ const Home = () => {
         </div>
         
         {/* Footer */}
-        <footer className="bg-gray-100 dark:bg-gray-800 py-4 text-center">
-          <p className="text-gray-600 dark:text-gray-300">
+        <footer className={`py-4 text-center ${isDarkMode ? 'bg-gray-800 text-gray-300' : 'bg-gray-100 text-gray-600'}`}>
+          <p>
             © 2024 | Built with <span role="img" aria-label="robot">🤖</span> by {' '}
             <a 
               href="https://x.com/0x7manish" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-blue-500 hover:text-blue-600 dark:text-blue-400 dark:hover:text-blue-300"
+              className={`${isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-500 hover:text-blue-600'}`}
             >
               Manish
             </a>
